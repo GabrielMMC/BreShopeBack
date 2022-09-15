@@ -14,6 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => ['guest:api']], function(){
+    Route::post('auth/login', [UserController::class, 'login']);
+});
+
+Route::group(['middleware' => ['auth:api']], function(){
+    Route::post('add',[UserController::class, 'add']);
+    Route::get('list',[UserController::class, 'list']);
+    Route::get('edit/{id}',[UserController::class, 'edit']);
+    Route::post('update',[UserController::class, 'update']);
+    Route::delete('delete/{id}',[UserController::class, 'delete']);
+});
+
+Route::group([
+    "prefix" => "policy-and-terms"
+], function () {
+    Route::get('/', [PolicyAndTermsController::class, 'get']);
+    Route::post('/save', [PolicyAndTermsController::class, 'store']);
 });
