@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BreshopController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['guest:api']], function () {
     Route::post('auth/login', [UserController::class, 'login']);
+
+    Route::get('get_breshop/{id}', [BreshopController::class, 'get_breshop']);
+    Route::post('store_breshop/', [BreshopController::class, 'store_breshop']);
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
