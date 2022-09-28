@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
@@ -14,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('breshops', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary()->default(new Expression('gen_random_uuid()'));
             $table->string('name');
             $table->string('description');
             $table->string('cep');
@@ -22,7 +23,7 @@ return new class extends Migration
             $table->string('city');
             $table->double('rate');
             $table->boolean('active');
-            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
