@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('cep');
             $table->string('state');
             $table->string('city');
-            $table->double('rate');
+            $table->string('number');
+            $table->string('file')->nullable();
             $table->boolean('active');
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

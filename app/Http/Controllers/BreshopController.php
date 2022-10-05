@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BreshopRequest;
 use App\Models\Breshop;
-use Illuminate\Http\Request;
+use Exception;
 
 class BreshopController extends Controller
 {
@@ -17,12 +18,34 @@ class BreshopController extends Controller
         } else {
             return response()->json([
                 'status' => true,
+                'breshop' => $breshop,
             ]);
         }
     }
 
-    public function store_breshop(Request $request)
+    public function store_breshop(BreshopRequest $request)
     {
-        return $request;
+        try {
+            $data = $request->validated();
+            return $data;
+
+            $breshop = new Breshop();
+            if ($request->file('file')) {
+                $img = $request->file('file');
+                $name = uniqid('banner_') . '.' . $img->getClientOriginalExtension();
+                $breshop->file = $img->storeAs('fotos', $name, ['disk' => 'public']);
+            }
+            $breshop->active = true;
+            $breshop->fill($data)->save();
+
+            return response()->json([
+                'status' => true,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => false,
+                'error' => $e,
+            ]);
+        }
     }
 }

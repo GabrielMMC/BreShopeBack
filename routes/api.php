@@ -18,17 +18,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['guest:api']], function () {
     Route::post('auth/login', [UserController::class, 'login']);
-
-    Route::get('get_breshop/{id}', [BreshopController::class, 'get_breshop']);
-    Route::post('store_breshop/', [BreshopController::class, 'store_breshop']);
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::post('add', [UserController::class, 'add']);
-    Route::get('list', [UserController::class, 'list']);
-    Route::get('edit/{id}', [UserController::class, 'edit']);
-    Route::post('update', [UserController::class, 'update']);
-    Route::delete('delete/{id}', [UserController::class, 'delete']);
+    Route::post('store_user', [UserController::class, 'store_user']);
+    Route::get('get_users', [UserController::class, 'get_users']);
+    Route::get('get_user/{id}', [UserController::class, 'get_user']);
+    Route::patch('update_user', [UserController::class, 'update_user']);
+    Route::delete('delete_user/{id}', [UserController::class, 'delete_user']);
+
+    Route::get('get_breshop/{id}', [BreshopController::class, 'get_breshop']);
+    Route::post('store_breshop', [BreshopController::class, 'store_breshop']);
 });
 
 Route::group([
