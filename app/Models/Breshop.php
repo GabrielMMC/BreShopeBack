@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Breshop extends Model
 {
-    use HasFactory;
+    use HasFactory, Uuid;
+    protected $key_type = 'string';
+    protected $table = 'breshops';
 
     protected $fillable = [
         'name',

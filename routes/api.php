@@ -18,9 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['guest:api']], function () {
     Route::post('auth/login', [UserController::class, 'login']);
-
-    Route::get('get_breshop/{id}', [BreshopController::class, 'get_breshop']);
-    Route::post('store_breshop/', [BreshopController::class, 'store_breshop']);
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
@@ -29,11 +26,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('edit/{id}', [UserController::class, 'edit']);
     Route::post('update', [UserController::class, 'update']);
     Route::delete('delete/{id}', [UserController::class, 'delete']);
-});
 
-Route::group([
-    "prefix" => "policy-and-terms"
-], function () {
-    Route::get('/', [PolicyAndTermsController::class, 'get']);
-    Route::post('/save', [PolicyAndTermsController::class, 'store']);
+    Route::get('get_breshop/{id}', [BreshopController::class, 'get_breshop']);
+    Route::post('store_breshop', [BreshopController::class, 'store_breshop']);
 });
