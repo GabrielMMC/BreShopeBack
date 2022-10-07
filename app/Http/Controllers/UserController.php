@@ -21,7 +21,7 @@ class UserController extends Controller
         }
 
 
-        if ($request->password != $user->password) {
+        if (!password_verify($request->password, $user->password)) {
             $error = ['Email ou senha incorretos!'];
         }
 
