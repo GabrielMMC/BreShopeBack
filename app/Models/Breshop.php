@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
+// Amo como você é inteligente e empenhado com tudo <3
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -31,4 +32,5 @@ class Breshop extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+    // Eu amo você!
 }

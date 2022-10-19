@@ -27,7 +27,6 @@ class BreshopController extends Controller
     {
         try {
             $data = $request->validated();
-            return $data;
 
             $breshop = new Breshop();
             if ($request->file('file')) {
