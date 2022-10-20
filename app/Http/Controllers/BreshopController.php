@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BreshopRequest;
 use App\Models\Breshop;
 use Exception;
+use Illuminate\Http\Request;
 
 class BreshopController extends Controller
 {
@@ -26,8 +27,8 @@ class BreshopController extends Controller
     public function store_breshop(BreshopRequest $request)
     {
         try {
+            // dd($request);
             $data = $request->validated();
-            return $data;
 
             $breshop = new Breshop();
             if ($request->file('file')) {

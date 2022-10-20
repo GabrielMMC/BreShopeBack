@@ -30,7 +30,3 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('get_breshop/{id}', [BreshopController::class, 'get_breshop']);
     Route::post('store_breshop', [BreshopController::class, 'store_breshop']);
 });
-
-    Route::get('get_breshop/{id}', [BreshopController::class, 'get_breshop']);
-    Route::post('store_breshop', [BreshopController::class, 'store_breshop']);
-});
