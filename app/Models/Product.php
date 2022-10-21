@@ -24,6 +24,7 @@ class Product extends Model
         'price',
         'description',
         'damage_description',
+        'quantity',
         'breshop_id',
         // Eu te amo!
     ];

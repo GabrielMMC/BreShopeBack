@@ -26,6 +26,7 @@ class ProductController extends Controller
             // Amo muito você
             $product->description = $request->input('description');
             $product->damage_description = $request->input('damage');
+            $product->quantity = $request->input('quantity');
             $product->breshop_id = $breshop->id;
             $product->save();
 
@@ -76,6 +77,24 @@ class ProductController extends Controller
     }
 
     public function get_products(Request $request)
+    {
+        $user = auth()->user();
+        $breshop = Breshop::where('user_id', '=', $user->id)->first();
+
+        $products = Product::orderBy('name', 'asc')->with(['images', 'sizes'])->where('breshop_id', '=', $breshop->id)->paginate(10);
+
+        return response()->json([
+            'products' => ProductResource::collection($products),
+            'pagination' => [
+                'current_page' => $products->currentPage(),
+                'last_page' => $products->lastPage(),
+                'total_pages' => $products->total(),
+                'per_page' => $products->perPage(),
+            ],
+        ]);
+    }
+
+    public function get_all_products(Request $request)
     {
         $products = Product::orderBy('name', 'asc')->with(['images', 'sizes'])->where(function ($q) use ($request) {
             $q->whereRaw('lower(name) LIKE lower(?)', ['%' . $request->search . '%']);
