@@ -98,7 +98,7 @@ class ProductController extends Controller
     {
         $products = Product::orderBy('name', 'asc')->with(['images', 'sizes'])->where(function ($q) use ($request) {
             $q->whereRaw('lower(name) LIKE lower(?)', ['%' . $request->search . '%']);
-        })->paginate(10);
+        })->paginate(48);
 
         return response()->json([
             'products' => ProductResource::collection($products),
@@ -141,6 +141,12 @@ class ProductController extends Controller
         $product->delete();
 
         return true;
+    }
+
+    public function get_public_product($id)
+    {
+        $product = Product::where('id', '=', $id)->with(['images', 'sizes'])->first();
+        return response()->json(['product' => $product]);
     }
 }
 

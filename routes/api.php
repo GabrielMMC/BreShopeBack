@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['guest:api']], function () {
     Route::post('auth/login', [UserController::class, 'login']);
     Route::get('get_all_products', [ProductController::class, 'get_all_products']);
+    Route::get('get_public_product/{id}', [ProductController::class, 'get_public_product']);
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
