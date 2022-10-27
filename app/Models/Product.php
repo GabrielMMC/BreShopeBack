@@ -29,6 +29,11 @@ class Product extends Model
         // Eu te amo!
     ];
 
+    public function owner()
+    {
+        return $this->belongsTo(Breshop::class, 'breshop_id', 'id');
+    }
+
     public function images()
     {
         return $this->hasMany(ProductImage::class, 'product_id', 'id');

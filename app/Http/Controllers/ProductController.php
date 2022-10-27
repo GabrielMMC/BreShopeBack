@@ -145,7 +145,7 @@ class ProductController extends Controller
 
     public function get_public_product($id)
     {
-        $product = Product::where('id', '=', $id)->with(['images', 'sizes'])->first();
+        $product = Product::where('id', '=', $id)->with(['images', 'sizes', 'owner'])->first();
         return response()->json(['product' => $product]);
     }
 }

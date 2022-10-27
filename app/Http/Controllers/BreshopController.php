@@ -34,7 +34,7 @@ class BreshopController extends Controller
             if ($request->file('file')) {
                 $img = $request->file('file');
                 $name = uniqid('banner_') . '.' . $img->getClientOriginalExtension();
-                $breshop->file = $img->storeAs('fotos', $name, ['disk' => 'public']);
+                $breshop->file = $img->storeAs('photos', $name, ['disk' => 'public']);
             }
             $breshop->active = true;
             $breshop->fill($data)->save();
