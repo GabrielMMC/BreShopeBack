@@ -18,6 +18,6 @@ class UserSeeder extends Seeder
     public function run()
     {
         $user = new User();
-        $user->fill(['name' => 'Administrador', 'email' => 'admin@admin.com', 'password' => bcrypt('123456')])->save();
+        $user->fill(['name' => 'Administrador', 'email' => 'admin@admin.com', 'password' => bcrypt('123456'), 'country' => 55, 'area' => 17, 'number' => 996664559])->save();
     }
 }

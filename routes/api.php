@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BreshopController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,4 +39,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('get_product/{id}', [ProductController::class, 'get_product']);
     Route::patch('update_product', [ProductController::class, 'update_product']);
     Route::delete('delete_product', [ProductController::class, 'delete_product']);
+
+    Route::post('store_order', [OrderController::class, 'store_order']);
 });
