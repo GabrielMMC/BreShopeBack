@@ -36,22 +36,19 @@ class UserController extends Controller
         }
     }
 
-    public function store_user(UserRequest $request)
+    public function register(UserRequest $request)
     {
         try {
-            $user = new User;
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
-            $user->password = $request->input('password');
+            $data = $request->validated();
+            $user = new User();
+            $user->fill($data)->save();
 
-            if ($request->file('file_path')) {
-                $img = $request->file('file_path');
-                $name = uniqid('foto_') . '.' . $img->getClientOriginalExtension();
-                $user->file_path = $img->storeAs('fotos', $name, ['disk' => 'public']);
-                $user->file_path = $img->storeAs('fotos', $name, ['disk' => 'public']);
-            }
-            $user->save();
-
+            // if ($request->file('file_path')) {
+            //     $img = $request->file('file_path');
+            //     $name = uniqid('foto_') . '.' . $img->getClientOriginalExtension();
+            //     $user->file_path = $img->storeAs('fotos', $name, ['disk' => 'public']);
+            //     $user->file_path = $img->storeAs('fotos', $name, ['disk' => 'public']);
+            // }
             return response()->json([
                 'status' => true,
             ]);

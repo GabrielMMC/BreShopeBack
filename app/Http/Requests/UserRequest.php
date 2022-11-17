@@ -41,18 +41,11 @@ class UserRequest extends FormRequest
                     'password' => 'required|min:6|max:100',
                 ];
                 break;
-            case 'login_app':
-                return [
-                    'email' => 'required|email',
-                    'password' => 'required|min:6|max:100',
-                ];
-                break;
             case 'register':
                 return [
                     'name' => 'required|string',
                     'email' => 'required|email',
-                    'password' => 'required|string|min:6|max:100|confirmed',
-                    'imagem' => 'sometimes|nullable|image'
+                    'password' => 'required|string|min:6|max:100',
                 ];
                 break;
             case 'edit_profile':

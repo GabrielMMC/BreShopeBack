@@ -13,82 +13,71 @@ class OrderController extends Controller
         $user = auth()->user();
         $breshop = Breshop::where('user_id', '=', $user->id)->first();
 
-        return $request->adress['cep'];
-
         return Http::withHeaders([
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . '95C1D59C6BCD4F829A9805FC4882510A'
-        ])->post('https://sandbox.api.pagseguro.com/orders', [
-            "reference_id" => "ex-00001",
-            "customer" => [
-                "name" => $user->name,
-                "email" => $user->email,
-                "tax_id" => "12345678909",
-                "phones" => [
+            'Authorization' => 'Basic c2tfdGVzdF9hZHZNUVlQQzdVWUw3ejJiOg=='
+        ])->post(
+            'https://api.pagar.me/core/v5/orders',
+            [
+                "items" => [
                     [
-                        "country" => $user->country,
-                        "area" => $user->area,
-                        "number" => $user->number,
-                        "type" => "MOBILE"
+                        "amount" => 40,
+                        "description" => "teste",
+                        "quantity" => 1,
+                        "code" => "123456789"
                     ]
-                ]
-            ],
-            "items" => [
-                [
-                    "reference_id" => $request->product['id'],
-                    "name" => $request->product['name'],
-                    "quantity" => 1,
-                    "unit_amount" => $request->product['price']
-                ]
-            ],
-            "qr_code" => [
-                "amount" => [
-                    "value" => 500
-                ]
-            ],
-            "shipping" => [
-                "address" => [
-                    "street" => $request->adress['street'],
-                    "number" => $request->adress['number'],
-                    "complement" => "apto 12",
-                    "locality" => "Pinheiros",
-                    "city" => $request->adress['city'],
-                    "region_code" => $request->adress['state'],
-                    "country" => "BRA",
-                    "postal_code" => $request->adress['cep']
-                ]
-            ],
-            "notification_urls" => [
-                "https=>//meusite.com/notificacoes"
-            ],
-            "charges" => [
-                [
-                    "reference_id" => "referencia do pagamento",
-                    "description" => "descricao do pagamento",
-                    "amount" => [
-                        "value" => 500,
-                        "currency" => "BRL"
+                ],
+                "shipping" => [
+                    "address" => [
+                        "country" => "BR",
+                        "state" => "SP",
+                        "city" => "Jales",
+                        "zip_code" => "15706086",
+                        "line_1" => "2913, Avenida São Lucas, Residencial São Lucas"
                     ],
-                    "payment_method" => [
-                        "type" => "CREDIT_CARD",
-                        "installments" => 1,
-                        "capture" => true,
-                        "card" => [
-                            "number" => $request->paymant['number'],
-                            "exp_month" => "12",
-                            "exp_year" => "2026",
-                            "security_code" =>  $request->paymant['cvv'],
-                            "holder" => [
-                                "name" =>  $request->paymant['name']
+                    "amount" => 11,
+                    "description" => "teste",
+                    "recipient_name" => "Adilson",
+                    "recipient_phone" => "17996664559"
+                ],
+                "payments" => [
+                    [
+                        "boleto" => [
+                            "bank" => "001",
+                            "instructions" => "teste",
+                            "nosso_numero" => "123456789",
+                            "type" => "BDP",
+                            "document_number" => "123456789"
+                        ],
+                        "split" => [
+                            [
+                                "options" => [
+                                    "charge_processing_fee" => true,
+                                    "charge_remainder_fee" => true,
+                                    "liable" => true
+                                ],
+                                "amount" => "97",
+                                "recipient_id" => "rp_XdWkPlKS7SOjY0Zb",
+                                "type" => "percentage"
                             ],
-                            "store" => false
-                        ]
-                    ],
-                    "notification_urls" => [
-                        "https=>//meusite.com/notificacoes"
+                            [
+                                "options" => [
+                                    "charge_processing_fee" => true,
+                                    "charge_remainder_fee" => true,
+                                    "liable" => true
+                                ],
+                                "amount" => "3",
+                                "recipient_id" => "rp_XdWkPlKS7SOjY0Zb",
+                                "type" => "percentage"
+                            ]
+                        ],
+                        "payment_method" => "boleto"
                     ]
-                ]
+                ],
+                "code" => "123456789",
+                "customer_id" => "cus_mJdN9XmfofgwpOyK",
+                "closed" => false
             ]
-        ]);
+        );
     }
 }

@@ -19,14 +19,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['middleware' => ['guest:api']], function () {
+    Route::post('register', [UserController::class, 'register']);
     Route::post('auth/login', [UserController::class, 'login']);
     Route::get('get_all_products', [ProductController::class, 'get_all_products']);
     Route::get('get_public_product/{id}', [ProductController::class, 'get_public_product']);
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::post('store_user', [UserController::class, 'store_user']);
-    Route::get('get_users', [UserController::class, 'get_users']);
     Route::get('get_user/{id}', [UserController::class, 'get_user']);
     Route::patch('update_user', [UserController::class, 'update_user']);
     Route::delete('delete_user/{id}', [UserController::class, 'delete_user']);
