@@ -14,12 +14,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('costumers', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->uuid('id')->primary()->default(new Expression('gen_random_uuid()'));
-            $table->timestamp('birthdate');
-            $table->double('document');
-            $table->string('document_type');
-            $table->string('gender');
+            $table->string('customer_id');
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('costumers');
+        Schema::dropIfExists('customers');
     }
 };

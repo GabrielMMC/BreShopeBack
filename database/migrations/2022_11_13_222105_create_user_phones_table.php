@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('country_code');
             $table->integer('area_code');
             $table->double('number');
-            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignUuid('user_data_id')->references('id')->on('users_data')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

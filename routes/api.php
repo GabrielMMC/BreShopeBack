@@ -4,6 +4,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BreshopController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserAddressController;
+use App\Http\Controllers\UserDataController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,7 +32,15 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::patch('update_user', [UserController::class, 'update_user']);
     Route::delete('delete_user/{id}', [UserController::class, 'delete_user']);
 
-    Route::get('get_breshop/{id}', [BreshopController::class, 'get_breshop']);
+    Route::get('get_user_data', [UserDataController::class, 'get_user_data']);
+    Route::post('store_user_data', [UserDataController::class, 'store_user_data']);
+    Route::post('update_user_data', [UserDataController::class, 'update_user_data']);
+
+    Route::get('get_user_address', [UserAddressController::class, 'get_user_address']);
+    Route::post('store_user_address', [UserAddressController::class, 'store_user_address']);
+    Route::put('update_user_address', [UserAddressController::class, 'update_user_address']);
+
+    Route::get('get_breshop', [BreshopController::class, 'get_breshop']);
     Route::post('store_breshop', [BreshopController::class, 'store_breshop']);
 
     Route::get('get_products', [ProductController::class, 'get_products']);

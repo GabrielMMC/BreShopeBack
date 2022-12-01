@@ -18,14 +18,11 @@ return new class extends Migration
             $table->uuid('id')->primary()->default(new Expression('gen_random_uuid()'));
             $table->string('name');
             $table->string('description');
-            $table->string('cep');
-            $table->string('state');
-            $table->string('city');
-            $table->string('number');
-            $table->string('file')->nullable();
             $table->boolean('active');
+            $table->string('file')->nullable();
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

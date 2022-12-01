@@ -14,10 +14,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('order_products', function (Blueprint $table) {
+        Schema::create('users_data', function (Blueprint $table) {
             $table->uuid('id')->primary()->default(new Expression('gen_random_uuid()'));
-            $table->foreignUuid('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreignUuid('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->string('name');
+            $table->double('document');
+            $table->timestamp('birthdate');
+            $table->string('gender');
+            $table->string('file_path')->nullable();
+            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_products');
+        Schema::dropIfExists('user_data');
     }
 };

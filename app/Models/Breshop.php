@@ -18,11 +18,7 @@ class Breshop extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'number',
         'description',
-        'cep',
-        'state',
-        'city',
         'active',
         'file',
     ];

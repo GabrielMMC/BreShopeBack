@@ -18,7 +18,8 @@ return new class extends Migration
             $table->uuid('id')->primary()->default(new Expression('gen_random_uuid()'));
             $table->string('name');
             $table->string('material');
-            $table->float('price');
+            $table->integer('quantity');
+            $table->double('price');
             $table->string('description')->nullable();
             $table->string('damage_description')->nullable();
             $table->foreignUuid('breshop_id')->references('id')->on('breshops')->onDelete('cascade');

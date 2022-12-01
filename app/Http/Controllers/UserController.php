@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\UserResource;
+use App\Models\UserAddress;
+use App\Models\UserData;
+use App\Models\UserPhone;
 use Exception;
 
 class UserController extends Controller

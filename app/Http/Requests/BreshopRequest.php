@@ -25,10 +25,6 @@ class BreshopRequest extends FormRequest
     {
         return [
             'name.required' => 'O campo nome é obrigatório',
-            'number.required' => 'O campo número é obrigatório',
-            'cep.required' => 'O campo CEP é obrigatório',
-            'state.required' => 'O campo estado é obrigatório',
-            'city.required' => 'O campo cidade é obrigatório',
             'description.required' => 'O campo descrição é obrigatório'
         ];
     }
@@ -38,12 +34,7 @@ class BreshopRequest extends FormRequest
         switch (strtolower($this->route()->getActionMethod())):
             case 'store_breshop':
                 return [
-                    'user_id' => 'required',
                     'name' => 'required',
-                    'number' => 'required',
-                    'cep' => 'required',
-                    'state' => 'required',
-                    'city' => 'required',
                     'description' => 'required',
                     'file' => 'sometimes'
                 ];
