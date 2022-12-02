@@ -21,7 +21,7 @@ class UserDataController extends Controller
             $user = auth()->user();
             $userData = UserData::where('user_id', '=', $user->id)->get();
 
-            return response()->json(['user_data' => UserDataResource::collection($userData)]);
+            return response()->json(['status' => true, 'user_data' => UserDataResource::collection($userData)]);
         } catch (Exception $ex) {
             return response()->json(['status' => false, 'error' => $ex]);
         }
@@ -29,27 +29,27 @@ class UserDataController extends Controller
 
     public function store_user_data(UserDataRequest $request)
     {
-        try {
-            $data = $request->validated();
-            $user = auth()->user();
+        // try {
+        $data = $request->validated();
+        $user = auth()->user();
 
-            $userData = new UserData();
-            $userPhone = new UserPhone();
-            $userData->fill(['user_id' => $user->id])->fill($data);
+        $userData = new UserData();
+        $userPhone = new UserPhone();
+        $userData->fill(['user_id' => $user->id])->fill($data);
 
-            if ($request->file('file_path')) {
-                $document = $request->file('file_path');
-                $name = uniqid('photo_') . '.' . $document->getClientOriginalExtension();
-                $userData->file_path = $document->storeAs('photos', $name, ['disk' => 'public']);
-            }
-            $userData->save();
-            $userPhone->fill(['user_data_id' => $userData->id])->fill($data)->save();
-
-            $customer = $this->store_customer($user, $userData, $userPhone);
-            return response()->json(['status' => true, 'customer' => $customer]);
-        } catch (Exception $ex) {
-            return response()->json(['status' => false, 'error' => $ex]);
+        if ($request->file('file_path')) {
+            $document = $request->file('file_path');
+            $name = uniqid('photo_') . '.' . $document->getClientOriginalExtension();
+            $userData->file_path = $document->storeAs('photos', $name, ['disk' => 'public']);
         }
+        $userData->save();
+        $userPhone->fill(['user_data_id' => $userData->id])->fill($data)->save();
+
+        $customer = $this->store_customer($user, $userData, $userPhone);
+        return response()->json(['status' => true, 'customer' => $customer]);
+        // } catch (Exception $ex) {
+        //     return response()->json(['status' => false, 'error' => $ex]);
+        // }
     }
 
     public function update_user_data(UserDataRequest $request)
@@ -83,19 +83,19 @@ class UserDataController extends Controller
             'json' => [
                 "phones" => [
                     "mobile_phone" => [
-                        "country_code" => "55",
-                        "area_code" => "17",
-                        "number" => "996664559"
+                        "country_code" => $phone->country_code,
+                        "area_code" => $phone->area_code,
+                        "number" => $phone->number
                     ],
                 ],
-                "birthdate" => "2002-05-27T13:34:00.000",
-                "name" => "Adailton",
-                "email" => "adailton2@email.com",
-                "code" => "123456789",
-                "document" => "45848395810",
+                "birthdate" => $data->birthdate,
+                "name" => $data->name,
+                "email" => $user->email,
+                "code" => $user->id,
+                "document" => $data->document,
                 "document_type" => "CPF",
                 "type" => "individual",
-                "gender" => "male"
+                "gender" => $data->gender
             ],
             "http_errors" => false
         ]);
