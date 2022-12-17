@@ -2,48 +2,123 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddressRequest;
 use App\Http\Requests\UserAddressRequest;
+use App\Models\Customer;
 use App\Models\UserAddress;
 use App\Models\UserData;
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class UserAddressController extends Controller
 {
-    public function store_user_address(UserAddressRequest $request)
+    //Function to list all addresses
+    public function list_addresses(Request $request)
     {
         try {
-            $data = $request->validated();
             $user = auth()->user();
+            $customer = Customer::where('user_id', '=', $user->id)->first();
 
-            $userAddress = new UserAddress();
-            $userAddress->fill(['user_id' => $user->id])->fill($data)->save();
+            $client = new Client();
+            $addresses = $client->request('GET', 'https://api.pagar.me/core/v5/customers/' . $customer->customer_id . '/addresses?page=' . $request->page . '&size=5/', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Basic c2tfdGVzdF9hZHZNUVlQQzdVWUw3ejJiOg=='
+                ],
+            ]);
+            $addresses = json_decode($addresses->getBody());
 
-            return response()->json(['status' => true]);
+            return response()->json(['status' => true, 'addresses' => $addresses]);
         } catch (Exception $ex) {
             return response()->json(['status' => false, 'error' => $ex]);
         }
     }
 
-    public function get_user_address()
+    //Function to store an address
+    public function store_address(AddressRequest $request)
     {
+        $data = $request->validated();
         try {
             $user = auth()->user();
-            $userAddress = UserAddress::where('user_id', '=', $user->id)->first();
+            $customer = Customer::where('user_id', '=', $user->id)->with(['address'])->first();
 
-            return response()->json(['status' => true, 'user' => $userAddress]);
+            $client = new Client();
+            $address = $client->request('POST', 'https://api.pagar.me/core/v5/customers/' . $customer->customer_id . '/addresses', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Basic c2tfdGVzdF9hZHZNUVlQQzdVWUw3ejJiOg=='
+                ],
+                'json' => [
+                    "zip_code" => $data['zip_code'],
+                    "city" => $data['city'],
+                    "state" => $data['state'],
+                    "country" => $data['country'],
+                    "line_1" => $data['number'] . ', ' . $data['street'] . ', ' . $data['neighborhood'],
+                    "line_2" => empty($data['complement']) ? '' : $data['complement']
+                ],
+                "http_errors" => false
+            ]);
+            $address = json_decode($address->getBody());
+
+            $newAddress = new UserAddress();
+            $newAddress->fill(['customer_id' => $customer->id, 'address_id' => $address->id])->save();
+
+            return response()->json(['status' => true, 'address' => $address]);
         } catch (Exception $ex) {
             return response()->json(['status' => false, 'error' => $ex]);
         }
     }
 
-    public function update_user_address(UserAddressRequest $request)
+    //Function to update an address
+    public function update_address(AddressRequest $request, $id)
+    {
+        $data = $request->validated();
+        try {
+            $user = auth()->user();
+            $customer = Customer::where('user_id', '=', $user->id)->first();
+
+            $client = new Client();
+            $address = $client->request('PUT', 'https://api.pagar.me/core/v5/customers/' . $customer->customer_id . '/addresses/' . $id, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Basic c2tfdGVzdF9hZHZNUVlQQzdVWUw3ejJiOg=='
+                ],
+                'json' => [
+                    "zip_code" => $data['zip_code'],
+                    "city" => $data['city'],
+                    "state" => $data['state'],
+                    "country" => $data['country'],
+                    "line_1" => $data['number'] . ', ' . $data['street'] . ', ' . $data['neighborhood'],
+                    "line_2" => empty($data['complement']) ? '' : $data['complement']
+                ],
+                "http_errors" => false
+            ]);
+            $address = json_decode($address->getBody());
+
+            return response()->json(['status' => true, 'address' => $address]);
+        } catch (Exception $ex) {
+            return response()->json(['status' => false, 'error' => $ex]);
+        }
+    }
+
+    //Function to delete an address
+    public function delete_address($id)
     {
         try {
-            $data = $request->validated();
+            $user = auth()->user();
+            $customer = Customer::where('user_id', '=', $user->id)->first();
 
-            $userAddress = UserAddress::where('id', '=', $data['id'])->first();
-            $userAddress->fill($data)->save();
+            $client = new Client();
+            $address = $client->request('DELETE', 'https://api.pagar.me/core/v5/customers/' . $customer->customer_id . '/addresses/' . $id, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Basic c2tfdGVzdF9hZHZNUVlQQzdVWUw3ejJiOg=='
+                ],
+            ]);
+            $address = json_decode($address->getBody());
 
             return response()->json(['status' => true]);
         } catch (Exception $ex) {

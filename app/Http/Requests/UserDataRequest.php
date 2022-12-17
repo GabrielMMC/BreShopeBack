@@ -28,7 +28,6 @@ class UserDataRequest extends FormRequest
             'document.required' => 'O campo CPF é obrigatório',
             'birthdate.required' => 'O campo Data de Nascimento é obrigatório',
             'gender.required' => 'O campo Sexo é obrigatório',
-            'country_code.required' => 'O campo País é obrigatório',
             'area_code.required' => 'O campo DDD é obrigatório',
             'number.required' => 'O campo Número é obrigatório',
         ];
@@ -40,11 +39,11 @@ class UserDataRequest extends FormRequest
             case 'store_user_data':
                 return [
                     'name' => 'required|string',
+                    'email' => 'required|string',
                     'document' => 'required|string',
                     'birthdate' => 'required|string',
                     'gender' => 'required|string',
-                    'file_path' => 'sometimes|file',
-                    'country_code' => 'required|integer',
+                    'file' => 'sometimes|file',
                     'area_code' => 'required|integer',
                     'number' => 'required|integer',
                 ];
@@ -53,11 +52,11 @@ class UserDataRequest extends FormRequest
             case 'update_user_data':
                 return [
                     'name' => 'required|string',
+                    'email' => 'required|string',
                     'document' => 'required|string',
                     'birthdate' => 'required|string',
                     'gender' => 'required|string',
-                    'file_path' => 'sometimes|file',
-                    'country_code' => 'required|integer',
+                    'file' => 'sometimes|file',
                     'area_code' => 'required|integer',
                     'number' => 'required|integer',
                     'id' => 'sometimes|string'

@@ -6,10 +6,12 @@ use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\UserResource;
+use App\Models\Customer;
 use App\Models\UserAddress;
 use App\Models\UserData;
 use App\Models\UserPhone;
 use Exception;
+use GuzzleHttp\Client;
 
 class UserController extends Controller
 {
@@ -34,31 +36,53 @@ class UserController extends Controller
                 'access_token' => $token,
                 'errors' => $error,
             ]);
+        } else {
+            return response()->json(['errors' => $error]);
         }
     }
 
     public function register(UserRequest $request)
     {
-        try {
-            $data = $request->validated();
-            $user = new User();
-            $user->fill($data)->save();
+        $data = $request->validated();
+        // try {
+        $user = new User();
+        $user->fill($data)->fill(['password' => bcrypt($data['password'])])->save();
 
-            // if ($request->file('file_path')) {
-            //     $img = $request->file('file_path');
-            //     $name = uniqid('foto_') . '.' . $img->getClientOriginalExtension();
-            //     $user->file_path = $img->storeAs('fotos', $name, ['disk' => 'public']);
-            //     $user->file_path = $img->storeAs('fotos', $name, ['disk' => 'public']);
-            // }
-            return response()->json([
-                'status' => true,
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => false,
-                'error' => $e,
-            ]);
-        }
+        $customer = $this->store_customer($user);
+        return response()->json([
+            'status' => true,
+            'customer' => $customer
+        ]);
+        // } catch (Exception $e) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'error' => $e,
+        //     ]);
+        // }
+    }
+
+    public function store_customer($user)
+    {
+        $client = new Client();
+        $customer = $client->request('POST', 'https://api.pagar.me/core/v5/customers/', [
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Basic c2tfdGVzdF9hZHZNUVlQQzdVWUw3ejJiOg=='
+            ],
+            'json' => [
+                "name" => $user['name'],
+                "email" => $user['email'],
+                "code" => $user['id']
+            ],
+            "http_errors" => false
+        ]);
+        $customer = json_decode($customer->getBody());
+
+        $newCustomer = new Customer();
+        $newCustomer->fill(['customer_id' => $customer->id, 'user_id' => $user->id])->save();
+
+        return $customer;
     }
 
     public function get_users(Request $request)

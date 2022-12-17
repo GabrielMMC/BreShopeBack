@@ -14,15 +14,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_address', function (Blueprint $table) {
+        Schema::create('cards', function (Blueprint $table) {
             $table->uuid('id')->primary()->default(new Expression('gen_random_uuid()'));
-            $table->double('zip_code');
-            $table->string('state');
-            $table->string('city');
-            $table->string('nbhd');
-            $table->string('street');
-            $table->double('number');
-            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('card_id');
+            $table->foreignUuid('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -35,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_addresses');
+        Schema::dropIfExists('cards');
     }
 };

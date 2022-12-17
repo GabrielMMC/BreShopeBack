@@ -24,6 +24,7 @@ class UserRequest extends FormRequest
     public function messages()
     {
         return [
+            'name.required' => 'O campo Nome é obrigatório',
             'email.required' => 'O campo E-mail é obrigatório',
             'email.email' => 'O campo E-mail deve ser um E-mail válido',
             'password.required' => 'O campo Senha é obrigatório',
@@ -46,13 +47,6 @@ class UserRequest extends FormRequest
                     'name' => 'required|string',
                     'email' => 'required|email',
                     'password' => 'required|string|min:6|max:100',
-                ];
-                break;
-            case 'edit_profile':
-                return [
-                    'name' => 'required|string',
-                    'password' => 'sometimes|nullable|string|min:6|max:100|confirmed',
-                    'imagem' => 'sometimes|nullable|image'
                 ];
                 break;
 

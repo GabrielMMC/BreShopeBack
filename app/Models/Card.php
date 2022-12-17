@@ -7,26 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Customer extends Model
+class Card extends Model
 {
     use HasFactory, Uuid, SoftDeletes;
     protected $keyType = 'string';
-    protected $table = 'customers';
+    protected $table = 'cards';
 
     public $incrementing = false;
 
     protected $fillable = [
+        'card_id',
         'customer_id',
-        'user_id',
     ];
-
-    public function address()
-    {
-        return $this->hasMany(UserAddress::class, 'customer_id', 'id');
-    }
-
-    public function card()
-    {
-        return $this->hasMany(Card::class, 'customer_id', 'id');
-    }
 }

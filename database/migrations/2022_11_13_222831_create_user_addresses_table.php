@@ -14,16 +14,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('default_bank_accounts', function (Blueprint $table) {
+        Schema::create('user_addresses', function (Blueprint $table) {
             $table->uuid('id')->primary()->default(new Expression('gen_random_uuid()'));
-            $table->string('type');
-            $table->integer('account_check_digit');
-            $table->integer('branch_check_digit');
-            $table->double('account_check_number');
-            $table->double('branch_number');
-            $table->integer('bank');
-            $table->string('holder_name');
-            $table->foreignUuid('recipient_id')->references('id')->on('recipients')->onDelete('cascade');
+            $table->string('address_id');
+            $table->boolean('active')->default(false);
+            $table->foreignUuid('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -36,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('default_bank_accounts');
+        Schema::dropIfExists('user-addresses');
     }
 };
